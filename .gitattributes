@@ -1,2 +1,5 @@
 # Ignore vendored scripts in GitHub stats
 src/static/scripts/* linguist-vendored
+
+# Force LF for shell scripts so images built on Windows get a valid shebang
+*.sh text eol=lf

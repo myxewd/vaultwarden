@@ -1,0 +1,40 @@
+services:
+  vaultwarden:
+    image: dreamlord2/vaultwarden:v2_1.37.3
+    container_name: vaultwarden
+    restart: unless-stopped
+
+    environment:
+      DOMAIN: "https://vault.example.com"
+      SIGNUPS_ALLOWED: "false"
+      INVITATIONS_ALLOWED: "false"
+      ADMIN_TOKEN: "${ADMIN_TOKEN}"
+      LOG_LEVEL: "info"
+
+      # ========================= SSO / Keycloak =========================
+      SSO_ENABLED: "true"
+      SSO_AUTHORITY: "https://${KEYCLOAK_HOST}/realms/${KEYCLOAK_REALM}"
+      SSO_CLIENT_ID: "vaultwarden"
+      SSO_CLIENT_SECRET: "${SSO_CLIENT_SECRET}"
+      SSO_SCOPES: "email profile"
+      SSO_ONLY: "false"
+      SSO_SIGNUPS_ALLOWED: "false"
+      SSO_SIGNUPS_MATCH_EMAIL: "true"
+      SSO_ALLOW_UNKNOWN_EMAIL_VERIFICATION: "false"
+      SSO_AUTH_ONLY_NOT_SESSION: "false"
+
+      # ====================== Key Connector  ======================
+      # KEY_CONNECTOR_ENABLED: "true"
+      # KEY_CONNECTOR_URL: "https://kc.example.com"
+      # KEY_CONNECTOR_ORG_NAME: ""
+      # KEY_CONNECTOR_EXEMPT_ADMINS: "true"
+
+    volumes:
+      - vaultwarden_data:/data
+
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  vaultwarden_data:
+    name: vaultwarden_data
